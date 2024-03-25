@@ -1,51 +1,21 @@
-// import { useState, useEffect } from 'react';
-// import { nanoid } from 'nanoid';
 import styles from './App.module.css';
 import { ContactList } from '../ContactList/ContactList';
 import { SearchBox } from '../SearchBox/SearchBox';
 import { ContactForm } from '../ContactForm/ContactForm';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchContacts } from '../../redux/contactsOps';
+import { selectLoading, selectError } from '../../redux/contactsSlice';
+import { Loader } from '../Loader/Loader';
 
 export default function App() {
-  // const [contacts, setContacts] = useState(() => {
-  //   const savedContacts = window.localStorage.getItem('saved-contacts');
-  //   if (savedContacts !== null) {
-  //     return JSON.parse(savedContacts);
-  //   }
-  //   return [
-  // { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-  // { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-  // { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-  // { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  //   ];
-  // });
+  const dispatch = useDispatch();
+  const loading = useSelector(selectLoading);
+  const error = useSelector(selectError);
 
-  // useEffect(() => {
-  //   window.localStorage.setItem('saved-contacts', JSON.stringify(contacts));
-  // }, [contacts]);
-
-  // const [inputValue, setInputValue] = useState('');
-
-  // const handleChange = evt => {
-  //   setInputValue(evt.target.value.toLowerCase().trim());
-  // };
-
-  // const filteredContacts = contacts.filter(contact =>
-  //   contact.name.toLowerCase().includes(inputValue)
-  // );
-
-  // const addContact = (newContact, { resetForm }) => {
-  //   setContacts(prevContacts => [
-  //     ...prevContacts,
-  //     { ...newContact, id: nanoid() },
-  //   ]);
-  //   resetForm();
-  // };
-
-  // const deleteContact = contactId => {
-  //   setContacts(prevContacts => {
-  //     return prevContacts.filter(contact => contact.id !== contactId);
-  //   });
-  // };
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <div className={styles.wrapper}>
@@ -53,6 +23,7 @@ export default function App() {
       <ContactForm />
       <SearchBox />
       <ContactList />
+      {loading && !error && <Loader />}
     </div>
   );
 }

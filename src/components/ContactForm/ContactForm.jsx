@@ -3,8 +3,7 @@ import * as yup from 'yup';
 import { useId } from 'react';
 import style from './ContactForm.module.css';
 import { useDispatch } from 'react-redux';
-import { addContact } from '../../redux/contactsSlice';
-import { nanoid } from 'nanoid';
+import { addContact } from '../../redux/contactsOps';
 
 const FeedbackSchema = yup.object().shape({
   name: yup
@@ -30,8 +29,7 @@ export const ContactForm = () => {
   const numberFieldId = useId();
   const dispatch = useDispatch();
 
-  const hendelSubmit = (value, action) => {
-    value.id = nanoid();
+  const handelSubmit = (value, action) => {
     dispatch(addContact(value));
     action.resetForm();
   };
@@ -39,10 +37,10 @@ export const ContactForm = () => {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={hendelSubmit}
+      onSubmit={handelSubmit}
       validationSchema={FeedbackSchema}
     >
-      <Form className={style.form} autocomplete="off">
+      <Form className={style.form}>
         <div className={style.field}>
           <label htmlFor={nameFieldId}>Name</label>
           <Field type="text" name="name" id={nameFieldId} placeholder="Name" />
